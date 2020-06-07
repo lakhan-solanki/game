@@ -1,6 +1,8 @@
 import pygame
 import random
 
+
+
 pygame.init()
 
 screen_width = 900
@@ -16,7 +18,15 @@ pygame.display.set_caption("Snakes")
 clock = pygame.time.Clock()
 font = pygame.font.SysFont(None,55)
 
+def disp(text, color,x,y):
+    screen_text = font.render(text,True,color)
+    gameWindow.blit(screen_text,[x,y])
+
 def score_disp(text, color,x,y):
+    screen_text = font.render(text,True,color)
+    gameWindow.blit(screen_text,[x,y])
+
+def high_score_disp(text, color,x,y):
     screen_text = font.render(text,True,color)
     gameWindow.blit(screen_text,[x,y])
 
@@ -38,11 +48,16 @@ def game_loop():
     food_x = random.randint(20,screen_width/1.5)
     food_y = random.randint(20,screen_height/1.5)
     score =0
+    global high_score
 
     while not exit_game:
         if game_over:
             gameWindow.fill(white)
+            if score >= high_score:
+                high_score=score
+                disp("New High Score !!!",red,350,160)
             score_disp("Score: " + str(score),red,350,200)
+            high_score_disp("High Score: "+ str(high_score),red,350,240)
             score_disp("Game Over! Press Enter to continue! ",red,120,300)
 
             for event in pygame.event.get():
@@ -62,19 +77,19 @@ def game_loop():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
                         if velocity_x == 0:
-                            velocity_x = velocity_init
+                            velocity_x = velocity_init + score//9
                             velocity_y = 0
                     if event.key == pygame.K_LEFT:
                         if velocity_x == 0:
-                            velocity_x = -velocity_init
+                            velocity_x = -velocity_init - score//9
                             velocity_y = 0
                     if event.key == pygame.K_UP:
                         if velocity_y == 0:
-                            velocity_y = -velocity_init
+                            velocity_y = -velocity_init - score//9
                             velocity_x = 0
                     if event.key == pygame.K_DOWN:
                         if velocity_y == 0:
-                            velocity_y = velocity_init
+                            velocity_y = velocity_init + score//9
                             velocity_x = 0
                     
             snake_x = snake_x + velocity_x
@@ -113,4 +128,5 @@ def game_loop():
     pygame.quit()
     quit()
 
+high_score=0
 game_loop()
