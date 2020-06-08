@@ -49,6 +49,7 @@ def game_loop():
     food_y = random.randint(20,screen_height/1.5)
     score =0
     global high_score
+    increment = 1
 
     while not exit_game:
         if game_over:
@@ -77,19 +78,19 @@ def game_loop():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RIGHT:
                         if velocity_x == 0:
-                            velocity_x = velocity_init + score//9
+                            velocity_x = velocity_init
                             velocity_y = 0
                     if event.key == pygame.K_LEFT:
                         if velocity_x == 0:
-                            velocity_x = -velocity_init - score//9
+                            velocity_x = -velocity_init
                             velocity_y = 0
                     if event.key == pygame.K_UP:
                         if velocity_y == 0:
-                            velocity_y = -velocity_init - score//9
+                            velocity_y = -velocity_init
                             velocity_x = 0
                     if event.key == pygame.K_DOWN:
                         if velocity_y == 0:
-                            velocity_y = velocity_init + score//9
+                            velocity_y = velocity_init 
                             velocity_x = 0
                     
             snake_x = snake_x + velocity_x
@@ -98,6 +99,8 @@ def game_loop():
 
             if abs(snake_x-food_x)<15 and abs(snake_y-food_y)<15:
                 score = score+10
+                if velocity_init <= 15:
+                    velocity_init += increment
                 food_x = random.randint(20,screen_width/1.5)
                 food_y = random.randint(20,screen_height/1.5)
                 snk_len+=5
